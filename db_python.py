@@ -29,3 +29,4 @@ def insert_code(informacion):
     finally:
         cur.close()
         conn.close()
+        
