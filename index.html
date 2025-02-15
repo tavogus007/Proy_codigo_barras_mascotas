@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Códigos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #007BFF;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lista de Códigos</h1>
+  <table id="codigo-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Información</th>
+        <th>Tiempo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="3">Cargando datos...</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    async function fetchData() {
+      try {
+        const response = await fetch('http://localhost:5000/api/codigo');
+        const data = await response.json();
+        const tableBody = document.querySelector('#codigo-table tbody');
+        tableBody.innerHTML = '';  // Limpiar el contenido previo
+
+        if (data.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="3">No hay datos disponibles.</td></tr>';
+          return;
+        }
+
+        data.forEach(code => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${code.id}</td>
+            <td>${code.informacion}</td>
+            <td>${new Date(code.tiempo).toLocaleString()}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Error al obtener los datos:', error);
+        document.querySelector('#codigo-table tbody').innerHTML = '<tr><td colspan="3">Error al cargar los datos.</td></tr>';
+      }
+    }
+
+    fetchData();
+  </script>
+
+</body>
+</html>
